@@ -20,7 +20,7 @@ class CreateSppsTable extends Migration
             $table->string('year_start', 4);
             $table->string('month_end', 2);
             $table->string('year_end', 4);
-            $table->foreignId('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->bigInteger('nominal');
             $table->timestamps();
         });
     }

@@ -10,6 +10,7 @@ use Exception;
 use App\Models\User;
 use App\Models\Classes;
 use App\Models\Student;
+use App\Models\Payment;
 
 use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -41,15 +42,32 @@ class StudentController extends Controller
                 ->make(true);
         }
     }
+    public function read($nisn){
+        if(Student::where('nisn', $nisn)->first() != null){
+            $student       = Student::where('nisn', $nisn)->first();
+            $classes  = Classes::get();
+            return view('students.read', compact('student', 'classes'));
+        }else{
+            return abort('404');
+        }
+    }
     
     public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $request->validate([
             'email' => 'required|email|unique:students,email',
         ]);
         try {
-            
+            if($request->get('year_end') != null && $request->get('month_end') != null){
+                $entered = $request->get('year_entered').$request->get('month_entered');
+                $end = $request->get('year_end').$request->get('month_end');
+                if((int)$entered > (int)$end){
+                    alert()->warning('Maaf','Bulan dan Tahun masuk tidak bisa lebih dari Bulan dan Tahun tamat atau keluar');
+                    return redirect()->back();
+                }
+            }
+
             $student                    = new Student();
             $student->name              = $request->get('name');
             $student->password          = Hash::make($request->get('password'));
@@ -71,39 +89,68 @@ class StudentController extends Controller
             alert()->success('Sukses','Data sukses disimpan');
             return redirect()->back();
         } catch (Exception $e){
-            return $e;
             alert()->warning('Maaf','Terjadi masalah dalam penginputan data, harap periksa ulang');
             return redirect()->back();
         }
     }
     public function edit($id){
-        if(User::find($id) != null){
-            $student       = User::find($id);
-            return view('students.edit', compact('user'));
+        if(Student::find($id) != null){
+            $pay = null;
+            $payment       = Payment::where('student_id',$id)->count();
+            if($payment > 0){
+                $pay = 'disabled';
+            }
+            $student       = Student::find($id);
+            $classes  = Classes::get();
+            return view('students.edit', compact('student', 'classes', 'pay'));
         }else{
             return abort('404');
         }
     }
     public function update(Request $request, $id){
-        if(User::find($id) != null){
-            $student       = User::find($id);
+        try {
+            if($request->get('year_end') != null && $request->get('month_end') != null){
+                $entered = $request->get('year_entered').$request->get('month_entered');
+                $end = $request->get('year_end').$request->get('month_end');
+                if((int)$entered > (int)$end){
+                    alert()->warning('Maaf','Bulan dan Tahun masuk tidak bisa lebih dari Bulan dan Tahun tamat atau keluar');
+                    return redirect()->back();
+                }
+            }
+            $student       = Student::find($id);
             $student->name             = $request->get('name');
             if ($request->get('password') != null){
-                $student->password         = $request->get('password');
+                $student->password         =  Hash::make($request->get('password'));
             }
-            $student->email            = $request->get('email');
+            $student->email             = $request->get('email');
+            $student->phone_number      = $request->get('phone_number');
+            $student->nisn              = $request->get('nisn');
+            $student->nis               = $request->get('nis');
+            $student->full_name         = $request->get('full_name');
+            $student->gender            = $request->get('gender');
+            $student->date_of_birth     = date("Y-m-d",strtotime($request->date_of_birth));
+            $student->junior_high_school     = $request->get('junior_high_school');
+            $student->month_entered     = $request->get('month_entered');
+            $student->year_entered      = $request->get('year_entered');
+            $student->month_end         = $request->get('month_end');
+            $student->year_end          = $request->get('year_end');
+            $student->class_id          = $request->get('class_id');
             $student->update();
             alert()->success('Sukses','Data sukses diupdate');
-            return redirect()->route('pengguna-index');
-        }else{
+            return redirect()->route('siswa-index');
+        } catch (Exception $e){
             alert()->warning('Maaf','Terjadi masalah dalam penginputan data, harap periksa ulang');
             return redirect()->back();
         }
     }
     public function destroy($id){
         try {
-            $student       = User::find($id);
-            // dd($datasiswa->delete());
+            $payment       = Payment::where('student_id',$id)->count();
+            if($payment > 0){
+                alert()->warning('Maaf','Harap hapus data pembayaran untuk siswa ini terlebih dahulu!');
+                return redirect()->back();
+            }
+            $student       = Student::find($id);
             if($student->delete()){
                 alert()->success('Sukses','Data berhasil dihapus');
                 return redirect()->back();

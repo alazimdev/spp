@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Classes;
+use App\Models\Student;
 
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
@@ -76,6 +77,11 @@ class ClassesController extends Controller
     }
     public function destroy($id){
         try {
+            $student       = Student::where('class_id',$id)->count();
+            if($student > 0){
+                alert()->warning('Maaf','Harap hapus data siswa yang terdaftar dikelas ini terlebih dahulu!');
+                return redirect()->back();
+            }
             $classes       = Classes::find($id);
             // dd($datasiswa->delete());
             if($classes->delete()){

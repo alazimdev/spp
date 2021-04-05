@@ -81,54 +81,20 @@
                                         <div class="form-group">
                                             <label>Username</label>
                                             <input type="text" class="form-control" id="staticEmail"
-                                                name="so-profile-name" value="Admin">
+                                                name="so-profile-name" value="Admin" disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="so-profile-name">Name</label>
                                             <input type="text" class="form-control" id="so-profile-name"
-                                                name="so-profile-name" value="George Taylor">
+                                                name="so-profile-name" value="George Taylor" disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="so-profile-email">Email</label>
                                             <input type="email" class="form-control" id="so-profile-email"
-                                                name="so-profile-email" value="g.taylor@example.com">
+                                                name="so-profile-email" value="g.taylor@example.com" disabled>
                                         </div>
                                     </div>
                                     <!-- END Personal -->
-
-                                    <!-- Password Update -->
-                                    <div class="block-content block-content-sm block-content-full bg-body">
-                                        <span class="text-uppercase font-size-sm font-w700">Password Update</span>
-                                    </div>
-                                    <div class="block-content block-content-full">
-                                        <div class="form-group">
-                                            <label for="so-profile-password">Current Password</label>
-                                            <input type="password" class="form-control" id="so-profile-password"
-                                                name="so-profile-password">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="so-profile-new-password">New Password</label>
-                                            <input type="password" class="form-control" id="so-profile-new-password"
-                                                name="so-profile-new-password">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="so-profile-new-password-confirm">Confirm New Password</label>
-                                            <input type="password" class="form-control"
-                                                id="so-profile-new-password-confirm"
-                                                name="so-profile-new-password-confirm">
-                                        </div>
-                                    </div>
-                                    <!-- END Password Update -->
-
-                                    <!-- Submit -->
-                                    <div class="block-content row justify-content-center border-top">
-                                        <div class="col-9">
-                                            <button type="submit" class="btn btn-block btn-hero-primary">
-                                                <i class="fa fa-fw fa-save mr-1"></i> Save
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <!-- END Submit -->
                                 </div>
                             </form>
                         </div>
@@ -221,21 +187,15 @@
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link {{ Route::currentRouteName() == 'spp-index' ? 'active':''}}" href="#">
+                            <a class="nav-main-link {{ Route::currentRouteName() == 'spp-index' ? 'active':''}}" href="{{route('spp-index')}}">
                                 <i class="nav-main-link-icon fa fa-money-check"></i>
                                 <span class="nav-main-link-name">SPP</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link {{ Route::currentRouteName() == 'pembayaran-index' ? 'active':''}}" href="#">
+                            <a class="nav-main-link {{ Route::currentRouteName() == 'pembayaran-index' ? 'active':''}}" href="{{route('pembayaran-index')}}">
                                 <i class="nav-main-link-icon fa fa-money-bill"></i>
                                 <span class="nav-main-link-name">Pembayaran</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link {{ Route::currentRouteName() == 'laporan-index' ? 'active':''}}" href="#">
-                                <i class="nav-main-link-icon fa fa-cogs"></i>
-                                <span class="nav-main-link-name">Laporan Pembayaran SPP</span>
                             </a>
                         </li>
                     </ul>

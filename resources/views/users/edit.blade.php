@@ -52,8 +52,8 @@
                             <div class="form-group">
                                 <label for="is_superuser">Jenis</label>
                                 <select class="form-control" id="is_superuser" name="is_superuser" disabled>
-                                    <option value="0">Petugas</option>
-                                    <option value="1">Admin</option>
+                                    <option value="0" @if($user->is_superuser == false) selected @endif>Petugas</option>
+                                    <option value="1" @if($user->is_superuser == true) selected @endif>Admin</option>
                                 </select>
                             </div>
                         </div>
@@ -61,7 +61,6 @@
                     <!-- END Basic Elements -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Keluar</button>
                     <button type="submit" class="btn btn-sm btn-primary">Submit</button>
                 </div>
             </form>

@@ -45,7 +45,7 @@
                                 <div class="form-group">
                                     <label for="phone_number">Nomor Handphone</label>
                                     <input type="number" class="form-control" id="phone_number" name="phone_number"
-                                        placeholder="Nomor Handphone" required>
+                                        placeholder="Nomor Handphone" min="0" max="9999999999999999" required>
                                     <p>Contoh: 0851xx</p>
                                 </div>
                             </div>
@@ -55,7 +55,7 @@
                                 <div class="form-group">
                                     <label for="nisn">NISN</label>
                                     <input type="number" class="form-control" id="nisn" name="nisn" placeholder="NISN"
-                                        required>
+                                        min="0" max="9999999999" required>
                                     <p>Contoh: 11002391xxxx</p>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
                                 <div class="form-group">
                                     <label for="nis">NIS</label>
                                     <input type="number" class="form-control" id="nis" name="nis"
-                                        placeholder="Nomor Handphone" required>
+                                        placeholder="NIS"min="0" max="999999999" required>
                                     <p>Contoh: 1707xxx</p>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                             <div class="col-lg-6 col-xl-6">
                                 <div class="form-group">
                                     <label for="date_of_birth">Tanggal Lahir</label>
-                                    <input type="date" class="js-flatpickr form-control bg-white" id="date_of_birth" name="date_of_birth" placeholder="d-m-Y" data-date-format="d-m-Y">
+                                    <input type="date" class="form-control bg-white" id="date_of_birth" name="date_of_birth" required>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-xl-6">
@@ -124,14 +124,8 @@
                             <div class="col-lg-6 col-xl-6">
                                 <div class="form-group">
                                     <label for="year_entered">Tahun Masuk</label>
-                                    <select name="year_entered" id="year_entered" class="form-control">
-                                        {{ $last= date('Y')-15 }}
-                                        {{ $now = date('Y') }}
-
-                                        @for ($i = $now; $i >= $last; $i--)
-                                            <option value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
+                                    <input type="number" class="form-control" id="year_entered" name="year_entered"
+                                        placeholder="Tahun Masuk"min="0" max="9999" required>
                                 </div>
                             </div>
                         </div>
@@ -159,15 +153,8 @@
                             <div class="col-lg-6 col-xl-6">
                                 <div class="form-group">
                                     <label for="year_end">Tahun Keluar/Tamat (opsi)</label>
-                                    <select name="year_end" id="year_end" class="form-control">
-                                        <option value="">=== Pilih ===</option>
-                                        {{ $last= date('Y')-15 }}
-                                        {{ $now = date('Y')+15 }}
-
-                                        @for ($i = $now; $i >= $last; $i--)
-                                            <option value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
+                                    <input type="number" class="form-control" id="year_end" name="year_end"
+                                        placeholder="Tahun Keluar/Tamat"min="0" max="9999">
                                 </div>
                             </div>
                         </div>
@@ -216,7 +203,7 @@
         <!-- Page Content -->
         <div class="content">
             <!-- Dynamic Table with Export Buttons -->
-            <div class="block block-rounded">
+            <div class="block block-rounded table-responsive" style="width: 100%">
                 <div class="block-content block-content-full">
                     <!-- DataTables init on table by adding .js-dataTable-buttons class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
                     <table id="example" class="table table-bordered table-striped table-vcenter">
@@ -255,13 +242,16 @@
                 //   'searching'   : true,
                 //   'ordering'    : true,
                 //   'info'        : true,
-                //   'autoWidth'   : true,
+                responsive   : true,
                 processing: true,
                 serverSide: true,
                 ajax: '{!! route('siswa-data') !!}',
                 columns: [{
                         data: 'nisn',
-                        name: 'nisn'
+                        name: 'nisn',
+                        render:function(data, type, row){
+                            return "<a href='/siswa/"+ row.nisn +"'>" + row.nisn + "</a>"
+                        }
                     },
                     {
                         data: 'nis',
@@ -295,7 +285,8 @@
                         data: 'action',
                         orderable: false,
                         searchable: true,
-                        className: 'dt-body-right'
+                        className: 'dt-body-right',
+                        width: '100px',
                     }
                 ],
                 "language": {
