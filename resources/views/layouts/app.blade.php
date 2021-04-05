@@ -209,13 +209,13 @@
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link {{ Route::currentRouteName() == 'kelas-index' ? 'active':''}}" href="#">
+                            <a class="nav-main-link {{ Route::currentRouteName() == 'kelas-index' ? 'active':''}}" href="{{route('kelas-index')}}">
                                 <i class="nav-main-link-icon fa fa-list"></i>
                                 <span class="nav-main-link-name">Kelas</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link {{ Route::currentRouteName() == 'siswa-index' ? 'active':''}}" href="#">
+                            <a class="nav-main-link {{ Route::currentRouteName() == 'siswa-index' ? 'active':''}}" href="{{route('siswa-index')}}">
                                 <i class="nav-main-link-icon fa fa-user"></i>
                                 <span class="nav-main-link-name">Siswa</span>
                             </a>
@@ -362,6 +362,26 @@
 
     @include('sweetalert::alert')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.14.0/sweetalert2.all.min.js" integrity="sha512-LXVbtSLdKM9Rpog8WtfAbD3Wks1NSDE7tMwOW3XbQTPQnaTrpIot0rzzekOslA1DVbXSVzS7c/lWZHRGkn3Xpg==" crossorigin="anonymous"></script>
+    @yield('js')
+    <script>
+        
+    function adminDelete() {
+        var postId = $(event.currentTarget).data('admin');
+        Swal.fire({
+            title: "yakin untuk menghapus data ini?",
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonClass: 'btn-danger waves-effect waves-light',
+            confirmButtonText: "Hapus",
+            closeOnCancel: true
+        }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            window.location.href = postId;
+        }
+        });
+    }
+    </script>
 </body>
 
 </html>

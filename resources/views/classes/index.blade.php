@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
-@section('subtitle', 'Pengguna')
+@section('subtitle', 'Kelas')
 @section('content')
     <div class="modal" id="modal-default-large" tabindex="-1" role="dialog" aria-labelledby="modal-default-large"
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Data Pengguna</h5>
+                    <h5 class="modal-title">Tambah Data Kelas</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('pengguna-store') }}" method="POST" onsubmit="return true;">
+                <form action="{{ route('kelas-store') }}" method="POST" onsubmit="return true;">
                     @csrf
                     <div class="modal-body pb-1">
 
@@ -20,34 +20,16 @@
                         <div class="row push">
                             <div class="col-lg-6 col-xl-6">
                                 <div class="form-group">
-                                    <label for="name">Nama Lengkap</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Nama Lengkap"
+                                    <label for="name">Nama Kelas</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Nama Kelas"
                                         required>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-xl-6">
                                 <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password"
-                                        placeholder="Password" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row push">
-                            <div class="col-lg-6 col-xl-6">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="Email"
-                                        required>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xl-6">
-                                <div class="form-group">
-                                    <label for="is_superuser">Jenis</label>
-                                    <select class="form-control" id="is_superuser" name="is_superuser">
-                                        <option value="0">Petugas</option>
-                                        <option value="1">Admin</option>
-                                    </select>
+                                    <label for="departement">Nama Jurusan</label>
+                                    <input type="text" class="form-control" id="departement" name="departement"
+                                        placeholder="Nama Jurusan" required>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +51,7 @@
                 class="d-md-flex justify-content-md-between align-items-md-center py-3 pt-md-3 pb-md-0 text-center text-md-left">
                 <div>
                     <h1 class="h2 mb-1">
-                        Pengguna
+                        Kelas
                     </h1>
                 </div>
                 <div class="mt-4 mt-md-0">
@@ -90,9 +72,8 @@
                     <table id="example" class="table table-bordered table-striped table-vcenter">
                         <thead>
                             <tr>
-                                <th>Nama lengkap</th>
-                                <th>Email</th>
-                                <th class="d-none d-sm-table-cell" style="width: 15%;">Jenis</th>
+                                <th>Nama Kelas</th>
+                                <th>Nama Jurusan</th>
                                 <th class="d-none d-sm-table-cell" style="width: 15%;">Dibuat pada</th>
                                 <th class="d-none d-sm-table-cell" style="width: 15%;">Terakhir diedit</th>
                                 <th style="width: 15%;">Aksi</th>
@@ -123,27 +104,19 @@
                 //   'autoWidth'   : true,
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('pengguna-data') !!}',
+                ajax: '{!! route('kelas-data') !!}',
                 columns: [{
                         data: 'name',
                         name: 'name'
                     },
                     {
-                        data: 'email',
-                        name: 'email'
-                    },
-                    {
-                        data: 'is_superuser',
-                        name: 'is_superuser'
+                        data: 'departement',
+                        name: 'departement'
                     },
                     {
                         data: 'created_at',
                         name: 'created_at',
                         searchable: true,
-                        
-                        type:   'datetime',
-                        def:    function () { return new Date(); },
-                        format: 'M/D/YYYY',
                     },
                     {
                         data: 'updated_at',
