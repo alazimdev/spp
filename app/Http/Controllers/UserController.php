@@ -53,7 +53,7 @@ class UserController extends Controller
             
             $user                   = new User();
             $user->name             = $request->get('name');
-            $user->password         = $request->get('password');
+            $user->password         = Hash::make($request->get('password'));
             $user->email            = $request->get('email');
             $user->is_superuser     = $request->get('is_superuser');
 
@@ -78,7 +78,7 @@ class UserController extends Controller
             $user       = User::find($id);
             $user->name             = $request->get('name');
             if ($request->get('password') != null){
-                $user->password         = $request->get('password');
+                $user->password         = Hash::make($request->get('password'));
             }
             $user->email            = $request->get('email');
             $user->update();
@@ -90,6 +90,10 @@ class UserController extends Controller
         }
     }
     public function destroy($id){
+        if($id == 1){
+            alert()->warning('Maaf','Data ini tidak diperkenankan untuk dihapus');
+            return redirect()->back();
+        }
         try {
             $user       = User::find($id);
             // dd($datasiswa->delete());

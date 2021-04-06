@@ -25,10 +25,10 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
+    return redirect()->route('index');
 })->name('dashboard');
 
-Route::get('/', [Controller::class, 'index'])->name('index');
+Route::middleware(['check:0'])->get('/', [Controller::class, 'index'])->name('index');
 Route::group(['prefix' => 'pengguna', 'as' => 'pengguna-'], function(){
     Route::get('/', [UserController::class, 'index'])->name('index');
     Route::post('/store', [UserController::class, 'store'])->name('store');

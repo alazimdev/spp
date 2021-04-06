@@ -234,10 +234,15 @@
                         <div class="dropdown-menu dropdown-menu-right p-0" aria-labelledby="page-header-user-dropdown">
                             <div class="p-2">
                                 <div role="separator" class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="op_auth_signin.html">
-                                    <i class="far fa-fw fa-arrow-alt-circle-left mr-1"></i> Sign Out
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                <a class="dropdown-item" onclick="event.preventDefault();
+                                this.closest('form').submit();">
+                                    <i class="far fa-fw fa-arrow-alt-circle-left mr-1"></i> {{ __('Log Out') }}
                                 </a>
+                                </form>
                             </div>
+                            
                         </div>
                     </div>
                     <!-- END User Dropdown -->
