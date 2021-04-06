@@ -160,4 +160,39 @@ class StudentController extends Controller
             return redirect()->back();
         }
     }
+
+
+    
+    public function index_siswa()
+    {
+        return view('pages.index');
+    }
+    public function data_siswa(Request $request)
+    {
+        try {
+            $student = Student::where('email',$request->email)->get();
+            if($student->count() > 0){
+                foreach($student as $data){
+                    if (Hash::check($request->password, $data->password)) {
+                        return redirect()->route('page-siswa-transaksi',$data->id);
+                    }
+                }
+            }
+            alert()->warning('Maaf','Email atau Password yang anda masukkan salah');
+            return redirect()->back();
+        } catch (Exception $e){
+            alert()->warning('Maaf','Terjadi kesalahan pada server');
+            return redirect()->back();
+        }
+    }
+    public function transaksi_siswa(Request $request, $id)
+    {
+        try {
+            $student = Student::find($id);
+            $payment = Payment::leftJoin('spps', 'payments.spp_id','=','spps.id')->where('student_id',$id)->orderBy('date','DESC')->get();
+            return view('pages.full', compact('student','payment'));
+        } catch (Exception $e){
+            return abort(404);
+        }
+    }
 }

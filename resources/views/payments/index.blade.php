@@ -63,6 +63,7 @@
         </div>
     </div>
 </div>
+@if(Auth::User()->is_superuser == true)
 <div class="modal" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default-large"
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -101,6 +102,7 @@
         </div>
     </div>
 </div>
+@endif
     <!-- Main Container -->
     <main id="main-container">
         <!-- Hero -->
@@ -126,7 +128,9 @@
             <!-- Dynamic Table with Export Buttons -->
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
+                    @if(Auth::User()->is_superuser == true)
                     <a data-toggle="modal" data-target="#modal-default" class="btn btn-success"><i class="fa fa-export"></i>Export</a><br/>
+                    @endif
                     <!-- DataTables init on table by adding .js-dataTable-buttons class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
                     <table id="example" class="table table-bordered table-striped table-vcenter">
                         <thead>

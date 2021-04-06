@@ -15,6 +15,7 @@ use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Exports\PaymentsExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Auth;
 
 class PaymentController extends Controller
 {
@@ -96,7 +97,7 @@ class PaymentController extends Controller
             $payment->spp_id        = $request->get('spp_id');
             $payment->date          = $request->get('date');
             $payment->amount        = $request->get('amount');
-            $payment->user_id       = '1';
+            $payment->user_id       = Auth::User()->id;
 
             $payment->save();
             alert()->success('Sukses','Data sukses disimpan');

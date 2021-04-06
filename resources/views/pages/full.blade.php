@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-    <title>Pembayaran SPP - @yield('subtitle')</title>
+    <title>Data Transaksi Siswa - {{$student->full_name}}</title>
 
     <meta name="description"
         content="Pembayaran SPP">
@@ -47,7 +47,7 @@
                     <div class="content-header">
                         <!-- User Info -->
                         <div class="ml-2">
-                            <a class="text-white font-w600" href="/">{{ Auth::User()->name }}</a>
+                            <a class="text-white font-w600" href="#">{{$student->full_name}}</a>
                         </div>
                         <!-- END User Info -->
 
@@ -80,12 +80,12 @@
                                         <div class="form-group">
                                             <label>Username</label>
                                             <input type="text" class="form-control" id="staticEmail"
-                                                name="so-profile-name" value="{{ Auth::User()->name }}" disabled>
+                                                name="so-profile-name" value="{{$student->full_name}}" disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="so-profile-email">Email</label>
                                             <input type="email" class="form-control" id="so-profile-email"
-                                                name="so-profile-email" value="{{ Auth::User()->email }}" disabled>
+                                                name="so-profile-email" value="{{$student->email}}" disabled>
                                         </div>
                                     </div>
                                     <!-- END Personal -->
@@ -156,42 +156,10 @@
                 <!-- Side Navigation -->
                 <div class="content-side">
                     <ul class="nav-main">
-                        @if(Auth::User()->is_superuser == true)
                         <li class="nav-main-item">
-                            <a class="nav-main-link {{ Route::currentRouteName() == 'index' ? 'active':''}}" href="{{route('index')}}">
-                                <i class="nav-main-link-icon fa fa-location-arrow"></i>
-                                <span class="nav-main-link-name">Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link {{ Route::currentRouteName() == 'pengguna-index' ? 'active':''}}" href="{{route('pengguna-index')}}">
-                                <i class="nav-main-link-icon fa fa-users"></i>
-                                <span class="nav-main-link-name">Pengguna</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link {{ Route::currentRouteName() == 'kelas-index' ? 'active':''}}" href="{{route('kelas-index')}}">
-                                <i class="nav-main-link-icon fa fa-list"></i>
-                                <span class="nav-main-link-name">Kelas</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link {{ Route::currentRouteName() == 'siswa-index' ? 'active':''}}" href="{{route('siswa-index')}}">
-                                <i class="nav-main-link-icon fa fa-user"></i>
-                                <span class="nav-main-link-name">Siswa</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link {{ Route::currentRouteName() == 'spp-index' ? 'active':''}}" href="{{route('spp-index')}}">
-                                <i class="nav-main-link-icon fa fa-money-check"></i>
-                                <span class="nav-main-link-name">SPP</span>
-                            </a>
-                        </li>
-                        @endif
-                        <li class="nav-main-item">
-                            <a class="nav-main-link {{ Route::currentRouteName() == 'pembayaran-index' ? 'active':''}}" href="{{route('pembayaran-index')}}">
+                            <a class="nav-main-link active" href="#">
                                 <i class="nav-main-link-icon fa fa-money-bill"></i>
-                                <span class="nav-main-link-name">Pembayaran</span>
+                                <span class="nav-main-link-name">Data Transaksi</span>
                             </a>
                         </li>
                     </ul>
@@ -224,13 +192,13 @@
                         <button type="button" class="btn btn-dual" id="page-header-user-dropdown" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-fw fa-user d-sm-none"></i>
-                            <span class="d-none d-sm-inline-block">{{ Auth::User()->name }}</span>
+                            <span class="d-none d-sm-inline-block">{{$student->full_name}}</span>
                             <i class="fa fa-fw fa-angle-down ml-1 d-none d-sm-inline-block"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right p-0" aria-labelledby="page-header-user-dropdown">
                             <div class="p-2">
                                 <div role="separator" class="dropdown-divider"></div>
-                                <form method="POST" action="{{ route('logout') }}">
+                                <form method="GET" action="{{ route('page-siswa-index') }}">
                                     @csrf
                                 <a class="dropdown-item" onclick="event.preventDefault();
                                 this.closest('form').submit();">
@@ -269,7 +237,46 @@
         </header>
         <!-- END Header -->
 
-        @yield('content')
+        
+            <!-- Page Content -->
+            <div class="content">
+                <!-- Dynamic Table with Export Buttons -->
+                <div class="block block-rounded">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">Data Transaksi</h3>
+                    </div>
+                    <div class="block-content block-content-full">
+                        <!-- DataTables init on table by adding .js-dataTable-buttons class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
+                        <table class="table table-bordered table-striped table-vcenter">
+                            <thead>
+                                <tr>
+                                    <th>SPP Periode</th>
+                                    <th>Tanggal Bayar</th>
+                                    <th>Jumlah Bayar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($payment as $data)
+                                <tr>
+                                    <td class="font-w600">
+                                        {{App\Models\Spp::find($data->spp_id)->period}}
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        {{$data->date}}
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        Rp {{number_format($data->amount,0,',','.')}}
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- END Dynamic Table with Export Buttons -->
+                <!--  -->
+            </div>
+            <!-- END Page Content -->
 
         <!-- Footer -->
         <footer id="page-footer" class="bg-body-light">
