@@ -27,10 +27,7 @@ Route::group(['namespace' => 'frontend'],function(){
     Route::group(['middleware' =>['auth:sanctum,web']],function(){
 
         Route::get('/', function () {
-            if(!Auth::guard('student')->check()){
-                return view('welcome');
-            }
-            return redirect()->route('page-siswa-login');
+            return view('welcome');
         });
 
     });

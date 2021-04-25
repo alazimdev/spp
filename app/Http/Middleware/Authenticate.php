@@ -17,6 +17,8 @@ class Authenticate extends Middleware
     {
         if(Auth::guard('student')->check()){
             return route('page-siswa-index');
+        }else if(Auth::guard('web')->check()){
+            return route('index');
         }
         if (! $request->expectsJson()) {
             return route('login');
