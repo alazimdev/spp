@@ -57,6 +57,6 @@ Sekarang kita bisa login yang terdiri dari beberapa role user yaitu:
 | **Email**    | admin@gmail.com |
 | **Password** | secret123       |
 
-Anda bisa mengunjungi link demo [disini](http://spp-azim.herokuapp.com/home) login menggunakan email password di atas.
+Anda bisa mengunjungi link demo [disini](http://spp-azim.herokuapp.com/login) login menggunakan email password di atas.
 
 **Mohon untuk tidak mengubah password dan meghapus data pengguna di atas.**
