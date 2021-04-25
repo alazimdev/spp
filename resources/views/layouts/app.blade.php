@@ -47,7 +47,7 @@
                     <div class="content-header">
                         <!-- User Info -->
                         <div class="ml-2">
-                            <a class="text-white font-w600" href="/">{{ Auth::User()->name }}</a>
+                            <a class="text-white font-w600" href="/">@if(Auth::guard('student')->user()){{Auth::guard('student')->user()->name}}@else{{ Auth::User()->name }}@endif</a>
                         </div>
                         <!-- END User Info -->
 
@@ -80,12 +80,12 @@
                                         <div class="form-group">
                                             <label>Username</label>
                                             <input type="text" class="form-control" id="staticEmail"
-                                                name="so-profile-name" value="{{ Auth::User()->name }}" disabled>
+                                                name="so-profile-name" value="@if(Auth::guard('student')->user()){{Auth::guard('student')->user()->name}}@else{{ Auth::User()->name }}@endif" disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="so-profile-email">Email</label>
                                             <input type="email" class="form-control" id="so-profile-email"
-                                                name="so-profile-email" value="{{ Auth::User()->email }}" disabled>
+                                                name="so-profile-email" value="@if(Auth::guard('student')->user()){{Auth::guard('student')->user()->email}}@else{{ Auth::User()->email }}@endif" disabled>
                                         </div>
                                     </div>
                                     <!-- END Personal -->
@@ -151,6 +151,7 @@
             </div>
             <!-- END Side Header -->
 
+            @if(Auth::guard('web')->check())
             <!-- Sidebar Scrolling -->
             <div class="js-sidebar-scroll">
                 <!-- Side Navigation -->
@@ -199,6 +200,7 @@
                 <!-- END Side Navigation -->
             </div>
             <!-- END Sidebar Scrolling -->
+            @endif
         </nav>
         <!-- END Sidebar -->
 
@@ -224,7 +226,7 @@
                         <button type="button" class="btn btn-dual" id="page-header-user-dropdown" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-fw fa-user d-sm-none"></i>
-                            <span class="d-none d-sm-inline-block">{{ Auth::User()->name }}</span>
+                            <span class="d-none d-sm-inline-block">@if(Auth::guard('student')->user()){{Auth::guard('student')->user()->name}}@else{{ Auth::User()->name }}@endif</span>
                             <i class="fa fa-fw fa-angle-down ml-1 d-none d-sm-inline-block"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right p-0" aria-labelledby="page-header-user-dropdown">

@@ -2,6 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Fortify\AttemptToAuthenticate;
+use App\Actions\Fortify\RedirectIfTwoFactorAuthenticatable;
+//use App\Guards\AdminStatefulGuard;
+use App\Http\Responses\LoginResponse;
+use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Routing\Controller;
+use Illuminate\Routing\Pipeline;
+use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
+use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
+// use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\LoginViewResponse;
+use Laravel\Fortify\Contracts\LogoutResponse;
+use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Http\Requests\LoginRequest;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,9 +29,103 @@ use App\Models\Payment;
 
 use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
+use Auth;
 
 class StudentController extends Controller
 {
+    /**
+     * The guard implementation.
+     *
+     * @var \Illuminate\Contracts\Auth\StatefulGuard
+     */
+    protected $guard;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @param  \Illuminate\Contracts\Auth\StatefulGuard
+     * @return void
+     */
+    public function __construct(StatefulGuard $guard)
+    {
+        $this->guard = $guard;
+    }
+
+    public function loginForm()
+    {
+        return view('auth.student_login', ['guard' => 'student']);
+    }
+
+    /**
+     * Show the login view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Laravel\Fortify\Contracts\LoginViewResponse
+     */
+    public function create(Request $request): LoginViewResponse
+    {
+        return app(LoginViewResponse::class);
+    }
+
+    /**
+     * Attempt to authenticate a new session.
+     *
+     * @param  \Laravel\Fortify\Http\Requests\LoginRequest  $request
+     * @return mixed
+     */
+    public function store(LoginRequest $request)
+    {
+        return $this->loginPipeline($request)->then(function ($request) {
+            return app(LoginResponse::class);
+        });
+    }
+
+    /**
+     * Get the authentication pipeline instance.
+     *
+     * @param  \Laravel\Fortify\Http\Requests\LoginRequest  $request
+     * @return \Illuminate\Pipeline\Pipeline
+     */
+    protected function loginPipeline(LoginRequest $request)
+    {
+        if (Fortify::$authenticateThroughCallback) {
+            return (new Pipeline(app()))->send($request)->through(array_filter(
+                call_user_func(Fortify::$authenticateThroughCallback, $request)
+            ));
+        }
+
+        if (is_array(config('fortify.pipelines.login'))) {
+            return (new Pipeline(app()))->send($request)->through(array_filter(
+                config('fortify.pipelines.login')
+            ));
+        }
+
+        return (new Pipeline(app()))->send($request)->through(array_filter([
+            config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
+            RedirectIfTwoFactorAuthenticatable::class,
+            AttemptToAuthenticate::class,
+            PrepareAuthenticatedSession::class,
+        ]));
+    }
+
+    /**
+     * Destroy an authenticated session.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Laravel\Fortify\Contracts\LogoutResponse
+     */
+    public function destroy(Request $request): LogoutResponse
+    {
+
+        $this->guard->logout();
+
+        // $request->session()->invalidate();
+
+        // $request->session()->regenerateToken();
+
+        return app(LogoutResponse::class);
+    }
+
     public function index()
     {
         $classes  = Classes::get();
@@ -52,7 +161,7 @@ class StudentController extends Controller
         }
     }
     
-    public function store(Request $request)
+    public function store_data(Request $request)
     {
         // dd($request->all());
         $request->validate([
@@ -143,7 +252,7 @@ class StudentController extends Controller
             return redirect()->back();
         }
     }
-    public function destroy($id){
+    public function destroy_data($id){
         try {
             $payment       = Payment::where('student_id',$id)->count();
             if($payment > 0){
@@ -165,7 +274,13 @@ class StudentController extends Controller
     
     public function index_siswa()
     {
-        return view('pages.index');
+        try{
+            $student = Student::find(Auth::guard('student')->user()->id);
+            $payment = Payment::leftJoin('spps', 'payments.spp_id','=','spps.id')->where('student_id',$student->id)->orderBy('date','DESC')->get();
+            return view('pages.full', compact('student','payment'));
+        }catch(Exception $e){
+            return redirect()->route('page-siswa-login');
+        }
     }
     public function data_siswa(Request $request)
     {

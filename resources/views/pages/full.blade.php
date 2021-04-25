@@ -198,7 +198,7 @@
                         <div class="dropdown-menu dropdown-menu-right p-0" aria-labelledby="page-header-user-dropdown">
                             <div class="p-2">
                                 <div role="separator" class="dropdown-divider"></div>
-                                <form method="GET" action="{{ route('page-siswa-index') }}">
+                                <form method="POST" action="{{ route('page-siswa-logout') }}">
                                     @csrf
                                 <a class="dropdown-item" onclick="event.preventDefault();
                                 this.closest('form').submit();">

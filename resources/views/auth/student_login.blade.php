@@ -5,8 +5,16 @@
         </x-slot>
 
         <x-jet-validation-errors class="mb-4" />
-        <h2>Login Siswa</h2><br>
-        <form method="POST" action="{{ route('page-siswa-data') }}">
+
+        @if (session('status'))
+            <div class="mb-4 font-medium text-sm text-green-600">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        <h1>Login sebagai Siswa</h1>
+
+        <form method="POST" action="{{ route('page-siswa-login') }}">
             @csrf
 
             <div>
@@ -20,10 +28,11 @@
             </div>
 
             <div class="mt-4">
-                <a href="{{route('login')}}">Bukan siswa? klik disini</a>
+                <a href="{{route('login')}}">Klik tulisan ini jika ingin login sebagai petugas</a>
             </div>
 
             <div class="flex items-center justify-end mt-4">
+
                 <x-jet-button class="ml-4">
                     {{ __('Log in') }}
                 </x-jet-button>

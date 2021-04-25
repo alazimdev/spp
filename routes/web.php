@@ -10,17 +10,40 @@ use App\Http\Controllers\PaymentController;
 
 use App\Http\Middleware\CheckUserRole;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::group(['prefix'=>'page/siswa','middleware'=>['student:student']], function () {
+    Route::get('/login', [StudentController::class, 'loginForm']);
+    Route::post('/login', [StudentController::class, 'store'])->name('page-siswa-login');
+});
 
+Route::post('page/siswa/logout', [StudentController::class,'destroy'])->name('page-siswa-logout')->middleware('auth:student');
+
+
+Route::post('/logout', \App\Http\Controllers\LogoutController::class)->name('logout')->middleware('auth:web');
+
+//Multi auth handling routes ends here
+
+Route::group(['namespace' => 'frontend'],function(){
+
+    Route::group(['middleware' =>['auth:sanctum,web']],function(){
+
+        Route::get('/', function () {
+            if(!Auth::guard('student')->check()){
+                return view('welcome');
+            }
+            return redirect()->route('page-siswa-login');
+        });
+
+    });
+});
+
+Route::group(['prefix' => 'page/siswa','namespace' => 'backend'],function(){
+
+    Route::group(['middleware' => ['auth.student:student']],function(){
+
+        Route::get('/', [StudentController::class, 'index_siswa'])->name('page-siswa-index');
+
+    });
+});
 Route::get('/', function () {
     return view('welcome');
 });
@@ -48,12 +71,12 @@ Route::group(['prefix' => 'kelas', 'as' => 'kelas-','middleware'=>'check:0'], fu
 });
 Route::group(['prefix' => 'siswa', 'as' => 'siswa-','middleware'=>'check:0'], function(){
     Route::get('/', [StudentController::class, 'index'])->name('index');
-    Route::post('/store', [StudentController::class, 'store'])->name('store');
+    Route::post('/store', [StudentController::class, 'store_data'])->name('store');
     Route::get('/get-data', [StudentController::class, 'data'])->name('data');
     Route::get('/{nisn}', [StudentController::class, 'read'])->name('read');
     Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('edit');
     Route::post('/{id}/update', [StudentController::class, 'update'])->name('update');
-    Route::get('/{id}/hapus', [StudentController::class, 'destroy'])->name('destroy');
+    Route::get('/{id}/hapus', [StudentController::class, 'destroy_data'])->name('destroy');
 });
 Route::group(['prefix' => 'spp', 'as' => 'spp-','middleware'=>'check:0'], function(){
     Route::get('/', [SppController::class, 'index'])->name('index');

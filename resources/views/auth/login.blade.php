@@ -33,7 +33,7 @@
             </div>
 
             <div class="mt-4">
-                <a href="{{route('page-siswa-index')}}">Klik tulisan ini jika ingin login sebagai siswa</a>
+                <a href="{{route('page-siswa-login')}}">Klik tulisan ini jika ingin login sebagai siswa</a>
             </div>
 
             <div class="flex items-center justify-end mt-4">
