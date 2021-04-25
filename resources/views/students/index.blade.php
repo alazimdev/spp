@@ -161,6 +161,13 @@
                         <div class="row push">
                             <div class="col-lg-12 col-xl-12">
                                 <div class="form-group">
+                                    <p>*Note: Untuk pembayaran SPP akan dimulai dan dihitung dari bulan tahun masuk dan bulan tahun keluar. Jadi, tolong perhatikan data dengan baik.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row push">
+                            <div class="col-lg-12 col-xl-12">
+                                <div class="form-group">
                                     <label for="class_id">Kelas</label>
                                     <select name="class_id" id="class_id" class="form-control" required>
                                         @foreach($classes as $data)

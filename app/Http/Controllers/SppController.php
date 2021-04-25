@@ -24,7 +24,9 @@ class SppController extends Controller
         if ($request->ajax()) {
             $spp  = Spp::all();
             return DataTables::of($spp)
-            ->addColumn('start_end', function($spp){
+            ->addColumn('nominal', function($spp){
+                return 'Rp '.number_format($spp->nominal, 0, ",", ".");
+            })->addColumn('start_end', function($spp){
                 return $spp->year_start.'-'.$spp->month_start.' - '.$spp->year_end.'-'.$spp->month_end;
             })->addColumn('updated_at', function($spp){
                 return $spp->updated_at->format('j M, Y h:ia');

@@ -55,6 +55,7 @@
                                     <option value="0" @if($user->is_superuser == false) selected @endif>Petugas</option>
                                     <option value="1" @if($user->is_superuser == true) selected @endif>Admin</option>
                                 </select>
+                                <p for="is_superuser">*Note: Jenis tidak dapat diedit.</p>
                             </div>
                         </div>
                     </div>

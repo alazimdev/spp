@@ -135,7 +135,7 @@
                     <table id="example" class="table table-bordered table-striped table-vcenter">
                         <thead>
                             <tr>
-                                <th>NIS</th>
+                                <th>NISN</th>
                                 <th>SPP Periode</th>
                                 <th>Tanggal Pembayaran</th>
                                 <th>Jumlah Bayar</th>
@@ -240,7 +240,7 @@
                 },
                 dataType: 'json',
                 success: function (result) {
-                    $('#spp_id').html('<option value="">==Pilih SPP===</option>');
+                    $('#spp_id').html('<option>==Pilih SPP===</option>');
                     $.each(result.spp, function (key, value) {
                         $("#spp_id").append('<option value="' + value
                             .id + '">[' + value.period + '] - '+ value.nominal +'</option>');
@@ -252,7 +252,6 @@
         $('#spp_id').on('change', function () {
             var idSpp = this.value;
             var idStudent = $('#student_id').val();
-            console.log(idStudent);
             $( "#date" ).prop( "disabled", false );
             $( "#date" ).val("");
             $( "#amount" ).prop( "disabled", false );
@@ -267,7 +266,7 @@
                 },
                 dataType: 'json',
                 success: function (result) {
-                    $('#alert').html("Sisa hutang: Rp " + result);
+                    $('#alert').html("Sisa hutang: Rp " + result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
                     $('#amount').attr({'max':result});
                 },
             });

@@ -56,12 +56,23 @@ class PaymentController extends Controller
         foreach($spp as $data){
             $ymep = $data->year_start.$data->month_start;
             $ymnp = $data->year_end.$data->month_end;
-            if(((int)$ymep <= (int)$ymes) && ((int)$ymes <= (int)$ymnp)){
-                array_push($spps_id, $data->id);
-            }else if($student->year_end != null && $student->month_end != null){
-                if((int)$ymep <= (int)$ymns && (int)$ymns <= (int)$ymnp){
+            //jika bulan tahun tamat belum diisi
+            if($student->year_end == null && $student->month_end == null){
+                if((int)$ymes <= (int)$ymnp){
                     array_push($spps_id, $data->id);
                 }
+            }else{
+                if((int)$ymes > (int)$ymnp){
+                    //
+                }else if((int)$ymep > (int)$ymns){
+                    //
+                }else{
+                    array_push($spps_id, $data->id);
+                }
+                
+                // if((int)$ymep <= (int)$ymns && (int)$ymns <= (int)$ymnp){
+                //     array_push($spps_id, $data->id);
+                // }
             }
         }
         $data['spp'] = Spp::whereIn('id',$spps_id)->get();
@@ -69,18 +80,18 @@ class PaymentController extends Controller
     }
     public function payment(Request $request){
         $student = Student::find($request->student_id);
-        $ymes = $student->year_entered.$student->month_entered;
-        $ymns = $student->year_end.$student->month_end;
+        $ymes = (int)$student->year_entered * 12 + (int)$student->month_entered;
+        $ymns = (int)$student->year_end * 12 + (int)$student->month_end;
         $spp = Spp::find($request->spp_id);
-        $ymep = $spp->year_start.$spp->month_start;
-        $ymnp = $spp->year_end.$spp->month_end;
-        $total_bulan = (int)$ymnp - (int)$ymep + 1;
-        if((int)$ymep < (int)$ymes){
-            $total_bulan = $total_bulan + (int)$ymep - (int)$ymes;
+        $ymep = (int)$spp->year_start * 12 + (int)$spp->month_start;
+        $ymnp = (int)$spp->year_end * 12 + (int)$spp->month_end;
+        $total_bulan = $ymnp - $ymep + 1;
+        if($ymep <= $ymes){
+            $total_bulan = $total_bulan + $ymep - $ymes;
         }
         if($student->year_end != null && $student->month_end != null){
-            if((int)$ymnp > (int)$ymns){
-                $total_bulan = $total_bulan + (int)$ymns - (int)$ymnp;
+            if($ymnp >= $ymns){
+                $total_bulan = $total_bulan + $ymns - $ymnp;
             }
         }
         $harus_dibayaru = (int)$spp->nominal * $total_bulan;

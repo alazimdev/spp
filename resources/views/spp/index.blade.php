@@ -84,6 +84,13 @@
                             </div>
                         </div>
                         <div class="row push">
+                            <div class="col-lg-12 col-xl-12">
+                                <div class="form-group">
+                                    <p>*Note: Untuk pembuatan data SPP, bulan dan tahun mulai dan berakhir tidak boleh bentrok dengan data lain. Jadi, tolong perhatikan data dengan baik.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row push">
                             <div class="col-lg-6 col-xl-6">
                                 <div class="form-group">
                                     <label for="nominal">Nominal Bayar Perbulan</label>
